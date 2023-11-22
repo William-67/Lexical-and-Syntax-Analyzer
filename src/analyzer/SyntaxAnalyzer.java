@@ -37,7 +37,7 @@ public class SyntaxAnalyzer {
 
         Token token;
         while (true) {
-            token = LexicalAnalyzer.getNextToken(); 
+            token = LexicalAnalyzer.getNextToken(); // Assume getNextToken() is defined elsewhere
 
             if (token.code == LexicalAnalyzer.EOF) {
                 break; // Exit the loop when the end of the input is reached
@@ -45,17 +45,10 @@ public class SyntaxAnalyzer {
                 if (token.code == LexicalAnalyzer.LEFT_BRACE) {
                     symbolTableList.pushScope();
                 } else if (token.code == LexicalAnalyzer.RIGHT_BRACE) {
-                    //symbolTableList.printAllScopes();
                     symbolTableList.popScope();
                 } else if (isType(token.code)) {
                     Token variable = LexicalAnalyzer.getNextToken();
-                    Symbol foundSymbol = symbolTableList.symbolExistsInCurrent(variable.lexeme);
-
-                    if (foundSymbol != null) {
-                        System.out.printf("Variable %s already defined %n", variable.lexeme);
-                        break;
-                    }
-                    symbolTableList.insertSymbol(token.lexeme, variable.lexeme, "0");
+                    symbolTableList.insertSymbol(token.lexeme, variable.lexeme, "2.5");
                     // Skip semicolon
                     LexicalAnalyzer.getNextToken();
                 } else if (token.code == LexicalAnalyzer.PRINT) {
@@ -67,11 +60,6 @@ public class SyntaxAnalyzer {
                     // Skip semicolon
                     LexicalAnalyzer.getNextToken();
                     Symbol foundSymbol = symbolTableList.symbolExists(variable.lexeme);
-                    if (foundSymbol == null) {
-                        System.out.printf("Variable %s undefined %n", variable.lexeme);
-                        break;
-                    }
-
                     System.out.printf("Variable %s: %f%n", foundSymbol.name, Double.parseDouble(foundSymbol.value));
                 } else if (token.code == LexicalAnalyzer.IDENT) {
                     Symbol foundSymbol = symbolTableList.symbolExists(token.lexeme);
@@ -83,14 +71,8 @@ public class SyntaxAnalyzer {
                         Token nextToken = LexicalAnalyzer.getNextToken();
                         if (nextToken.code != LexicalAnalyzer.ASSIGN_OP) {
                             statementStack.push(Double.parseDouble(foundSymbol.value));
-                            if (nextToken.code != LexicalAnalyzer.SEMICOLON){
-                                statementStack.push(nextToken.lexeme.charAt(0));
-                            }
-                            else{
-                                double identifierValue = ExpressionEvaluator.evaluateExpression(statementStack);
-                                identifier.value = Double.toString(identifierValue);
-                            }
-                        } else  {
+                            statementStack.push(nextToken.lexeme.charAt(0));
+                        } else {
                             identifier = foundSymbol;
                         }
                     }
@@ -98,7 +80,6 @@ public class SyntaxAnalyzer {
                     if (isOp(token.code)) {
                         statementStack.push(token.lexeme.charAt(0));
                     } else {
-                        
                         statementStack.push(Double.parseDouble(token.lexeme));
                     }
                 } else {
