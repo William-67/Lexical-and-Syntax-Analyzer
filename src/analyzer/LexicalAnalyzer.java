@@ -61,8 +61,9 @@ public class LexicalAnalyzer {
     public static void initLexicalAnalyzer() {
         /* Open the input data file and process its contents */
         try {
-            in_fp = new BufferedReader(new FileReader("inputs_outputs/input1.txt"));
+            in_fp = new BufferedReader(new FileReader("inputs_outputs/input2.txt"));
             getChar();
+            
         } catch (IOException e) {
             System.err.println("ERROR - cannot open input.txt");
         }
@@ -271,13 +272,13 @@ public class LexicalAnalyzer {
                 // Check if the lexeme is a keyword
                 String lexemeStr = lexeme.toString();
                 if (lexemeStr.equals("int"))
-                    nextToken = IF;
+                    nextToken = TYPE_INT;
                 else if (lexemeStr.equals("float"))
-                    nextToken = ELSE;
+                    nextToken = TYPE_FLOAT;
                 else if (lexemeStr.equals("string"))
-                    nextToken = FOR;
+                    nextToken = TYPE_STRING;
                 else if (lexemeStr.equals("print"))
-                    nextToken = WHILE;
+                    nextToken = PRINT;
                 else if (charClass == UNKNOWN && !Character.isWhitespace(nextChar) && !specialChar.contains(String.valueOf(nextChar))) {
                     addChar();
                     error = new StringBuilder("Error - illegal identifier");
@@ -335,8 +336,8 @@ public class LexicalAnalyzer {
         token.lexeme = lexeme.toString();
         token.line = currentLineNumber;
         /* End of switch */
-        System.out.printf("Next token is: %d, Next lexeme is %s", nextToken, lexeme);
-        System.out.printf("\t%s\n", error);
+        // System.out.printf("Next token is: %d, Next lexeme is %s", nextToken, lexeme);
+        // System.out.printf("\t%s\n", error);
         return token;
     }
 }

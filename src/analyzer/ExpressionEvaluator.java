@@ -15,7 +15,7 @@ public class ExpressionEvaluator {
         Stack operatorStack = new Stack(200);
 
         while (!expression.isEmpty()) {
-            char token = (char) expression.pop();
+            double token = expression.pop() ;
 
             if (token == '(') {
                 operatorStack.push(token);
@@ -32,19 +32,21 @@ public class ExpressionEvaluator {
                 // Pop the opening parenthesis from the operator stack
                 operatorStack.pop();
             } else if (token == '+' || token == '-' || token == '*' || token == '/') {
-                while (!operatorStack.isEmpty() && precedence((char) operatorStack.peek()) >= precedence(token)) {
+                while (!operatorStack.isEmpty() && precedence((char) operatorStack.peek()) >= precedence((char) token)) {
                     double operand2 = operandStack.pop();
                     double operand1 = operandStack.pop();
                     char op = (char) operatorStack.pop();
+                    
 
                     // Perform the operation and push the result onto the operand stack
                     operandStack.push(performOperation(op, operand1, operand2));
                 }
-
+                
                 // Push the current operator onto the operator stack
                 operatorStack.push(token);
             } else {
                 // Handle operands
+                
                 double operand = Double.parseDouble(String.valueOf(token));
                 operandStack.push(operand);
             }
