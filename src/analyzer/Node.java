@@ -26,6 +26,7 @@ public class Node {
     public Node pushScope() {
         Node newNode = new Node();
         newNode.next = this;
+//        this.next = newNode;
         return newNode;
     }
 
