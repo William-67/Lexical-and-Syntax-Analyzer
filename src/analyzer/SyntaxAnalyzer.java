@@ -49,7 +49,7 @@ public class SyntaxAnalyzer {
                     symbolTableList.popScope();
                 } else if (isType(token.code)) {
                     Token variable = LexicalAnalyzer.getNextToken();
-                    Symbol foundSymbol = symbolTableList.symbolExists(variable.lexeme);
+                    Symbol foundSymbol = symbolTableList.symbolExistsInCurrent(variable.lexeme);
 
                     if (foundSymbol != null) {
                         System.out.printf("Variable %s already defined %n", variable.lexeme);
@@ -66,19 +66,36 @@ public class SyntaxAnalyzer {
                     LexicalAnalyzer.getNextToken();
                     // Skip semicolon
                     LexicalAnalyzer.getNextToken();
-                    Symbol foundSymbol = symbolTableList.symbolExists(variable.lexeme);
+
+                    Symbol foundSymbol = symbolTableList.symbolExistsInCurrent(variable.lexeme);
+
                     if (foundSymbol == null) {
-                        System.out.printf("Variable %s undefined %n", variable.lexeme);
-                        break;
+
+                        foundSymbol = symbolTableList.symbolExists(variable.lexeme);
+
+                        if (foundSymbol == null) {
+
+                            System.out.printf("Variable %s undefined %n", variable.lexeme);
+                            break;
+
+                        }
+
                     }
 
                     System.out.printf("Variable %s: %f%n", foundSymbol.name, Double.parseDouble(foundSymbol.value));
                 } else if (token.code == LexicalAnalyzer.IDENT) {
-                    Symbol foundSymbol = symbolTableList.symbolExists(token.lexeme);
 
+                    Symbol foundSymbol = symbolTableList.symbolExistsInCurrent(token.lexeme);
+                    Symbol foundSymbol2 = symbolTableList.symbolExists(token.lexeme);
+
+                    if (foundSymbol==null && foundSymbol2!=null){
+                        foundSymbol = foundSymbol2;
+                    }
                     if (foundSymbol == null) {
+
                         System.out.printf("Variable %s undefined %n", token.lexeme);
                         break;
+
                     } else {
                         Token nextToken = LexicalAnalyzer.getNextToken();
                         if (nextToken.code != LexicalAnalyzer.ASSIGN_OP) {

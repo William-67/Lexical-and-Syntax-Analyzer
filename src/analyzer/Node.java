@@ -118,6 +118,24 @@ public class Node {
         return null;
     }
 
+    public Symbol symbolExistsInCurrent(String name) {
+        if (this.next==null){
+            return null;
+        }
+        Node current = this;
+        while (current.next!=null){
+            current = current.next;
+        }
+
+        for (int i = 0; i < current.count; i++) {
+            if (current.symbolTable.symbols[i].name.equals(name)) {
+                return current.symbolTable.symbols[i];
+            }
+        }
+        return null;
+    }
+
+
     public void freeEnvironment() {
 //        while (this != null) {
 //            Node temp = this;
