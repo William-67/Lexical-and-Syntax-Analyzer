@@ -6,4 +6,4 @@ For this assignment,I implement all method in Node.java and modify part of Synta
 
 To run this program, simply run SyntaxAnalyzer.
 
-If you want to change testing file, modify the filename in LexicalAnalyzer 
+If you want to change testing file, modify the filename in LexicalAnalyzer in line 64.
