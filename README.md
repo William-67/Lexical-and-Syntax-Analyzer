@@ -6,6 +6,6 @@ For this assignment,I implement all method in Node.java and modify part of Synta
 
 To run this program, simply run SyntaxAnalyzer.
 
-If you want to change testing file, modify the filename in LexicalAnalyzer in line 64.
+If you want to change testing file, modify the filename in LexicalAnalyzer in line 64. All test cases are in Inputs_Outputs directory.
 
 After running the program, output will be shown in the terminal.
