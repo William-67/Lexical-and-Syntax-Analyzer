@@ -61,7 +61,7 @@ public class LexicalAnalyzer {
     public static void initLexicalAnalyzer() {
         /* Open the input data file and process its contents */
         try {
-            in_fp = new BufferedReader(new FileReader("inputs_outputs/input2.txt"));
+            in_fp = new BufferedReader(new FileReader("inputs_outputs/input5.txt"));
             getChar();
             
         } catch (IOException e) {

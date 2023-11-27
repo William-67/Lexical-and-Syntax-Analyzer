@@ -96,8 +96,30 @@ public class Node {
         }
     }
 
-    // public static void main(String[] args) {
-    //     // Example usage:
+     public static void main(String[] args) {
+
+         Node stack = new Node(); // Create an initial empty stack
+
+// Push three scopes
+         stack.pushScope();
+         stack.insertSymbol("int", "x", "10");
+         stack.printCurrentScope();
+         stack.pushScope();
+         stack.insertSymbol("int", "y", "15");
+         stack.printCurrentScope();
+         stack.pushScope();
+         stack.insertSymbol("int", "z", "20");
+         stack.printCurrentScope();
+
+// Pop three scopes
+         stack.popScope();
+         stack.printCurrentScope();
+         stack.popScope();
+         stack.printCurrentScope();
+         stack.popScope();
+         stack.printCurrentScope();
+
+         //     // Example usage:
     //     Node head = new Node();
     //     head.pushScope();
     //     head.insertSymbol("int", "x", "10");
@@ -107,7 +129,5 @@ public class Node {
     //     head.printCurrentScope();
 
     //     head.freeEnvironment();
-    // }
+     }
 }
-
-
