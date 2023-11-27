@@ -25,14 +25,26 @@ public class Node {
 
     public Node pushScope() {
         Node newNode = new Node();
-        newNode.next = this;
-//        this.next = newNode;
+
+        Node current = this;
+        while (current.next!=null){
+            current = current.next;
+        }
+
+        current.next = newNode;
         return newNode;
     }
 
     public Node popScope() {
-        if (this != null) {
-            return this.next;
+        if (this.next != null) {
+            Node current = this;
+            Node last = this;
+            while (current.next!=null){
+                last = current;
+                current = current.next;
+            }
+            last.next = null;
+            return current;
         } else {
             System.out.println("Cannot pop from an empty symbol table");
             return this;
@@ -40,10 +52,16 @@ public class Node {
     }
 
     public void printCurrentScope() {
-        if (this != null) {
+        if (this.next != null) {
+
+            Node current = this;
+            while (current.next!=null){
+                current = current.next;
+            }
+
             System.out.println("Current Scope Symbols:");
-            for (int i = 0; i < this.count; i++) {
-                System.out.println(this.symbolTable.symbols[i].name + "\t " + this.symbolTable.symbols[i].value);
+            for (int i = 0; i < current.count; i++) {
+                System.out.println(current.symbolTable.symbols[i].name + "\t " + current.symbolTable.symbols[i].value);
             }
             System.out.println("\n");
         } else {
@@ -52,7 +70,7 @@ public class Node {
     }
 
     public void printAllScopes() {
-        Node current = this;
+        Node current = this.next;
         while (current != null) {
             System.out.println("Scope Symbols:");
             for (int i = 0; i < current.count; i++) {
@@ -64,19 +82,31 @@ public class Node {
     }
 
     public void insertSymbol(String symbolType, String symbolName, String symbolValue) {
-        if (this.count < SymbolTable.MAX_SYMBOLS) {
-            Symbol symbol = this.symbolTable.symbols[this.count];
+
+        if (this.next==null){
+            System.out.println("Cannot add symbol because currently no scope exists.");
+        }
+        Node current = this;
+        while (current.next!=null){
+            current = current.next;
+        }
+        if (current.count < SymbolTable.MAX_SYMBOLS) {
+
+            Symbol symbol = new Symbol();
+
             symbol.name = symbolName;
             symbol.value = symbolValue;
             symbol.type = symbolType;
-            this.count++;
+
+            current.symbolTable.symbols[current.count++] = symbol;
+
         } else {
             System.out.println("Symbol table is full");
         }
     }
 
     public Symbol symbolExists(String name) {
-        Node current = this;
+        Node current = this.next;
         while (current != null) {
             for (int i = 0; i < current.count; i++) {
                 if (current.symbolTable.symbols[i].name.equals(name)) {
@@ -89,29 +119,32 @@ public class Node {
     }
 
     public void freeEnvironment() {
-        while (this != null) {
-            Node temp = this;
-            this.next = temp.next;
-            temp = null;
-        }
+//        while (this != null) {
+//            Node temp = this;
+//            this.next = temp.next;
+//            temp = null;
+//        }
+        this.next = null;
     }
 
      public static void main(String[] args) {
 
          Node stack = new Node(); // Create an initial empty stack
 
-// Push three scopes
+            // Push three scopes
          stack.pushScope();
          stack.insertSymbol("int", "x", "10");
-         stack.printCurrentScope();
+         stack.insertSymbol("int", "d", "1000");
+         stack.printAllScopes();
          stack.pushScope();
          stack.insertSymbol("int", "y", "15");
-         stack.printCurrentScope();
+         stack.printAllScopes();
          stack.pushScope();
          stack.insertSymbol("int", "z", "20");
-         stack.printCurrentScope();
+         stack.printAllScopes();
 
-// Pop three scopes
+
+            // Pop three scopes
          stack.popScope();
          stack.printCurrentScope();
          stack.popScope();
